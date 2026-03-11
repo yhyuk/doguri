@@ -1,180 +1,238 @@
 import { describe, it, expect } from 'vitest';
 import {
-  addThousandSeparators,
-  removeSeparators,
-  isValidNumber,
-  processLine,
-  processBatch,
-  countNumbers,
-  getFormatStats
+  formatForSqlIn,
+  getFormatStats,
+  trimValues,
+  removeDuplicates,
+  sortValues,
+  wrapInQuotes,
+  type FormatOptions
 } from './utils';
 
-describe('CommaFormatter utils', () => {
-  describe('addThousandSeparators', () => {
-    it('should add comma separators', () => {
-      expect(addThousandSeparators('1234567')).toBe('1,234,567');
-      expect(addThousandSeparators(1234567)).toBe('1,234,567');
+describe('CommaFormatter utils - SQL IN Query Support', () => {
+  describe('formatForSqlIn', () => {
+    it('should format newline-separated values for SQL IN query', () => {
+      const input = 'user1\nuser2\nuser3';
+      const options: FormatOptions = {
+        wrapInQuotes: true,
+        outputFormat: 'inline',
+        wrapInParentheses: true,
+        removeDuplicates: false,
+        sortOrder: 'none',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn(input, options)).toBe("('user1', 'user2', 'user3')");
     });
 
-    it('should preserve decimal points', () => {
-      expect(addThousandSeparators('1234567.89')).toBe('1,234,567.89');
-      expect(addThousandSeparators('1234.5')).toBe('1,234.5');
+    it('should format with newline output format', () => {
+      const input = 'user1\nuser2\nuser3';
+      const options: FormatOptions = {
+        wrapInQuotes: true,
+        outputFormat: 'newline',
+        wrapInParentheses: true,
+        removeDuplicates: false,
+        sortOrder: 'none',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn(input, options)).toBe("(\n'user1',\n'user2',\n'user3'\n)");
     });
 
-    it('should add space separators', () => {
-      expect(addThousandSeparators('1234567', 'space')).toBe('1 234 567');
+    it('should handle comma-separated input', () => {
+      const input = 'value1, value2, value3';
+      const options: FormatOptions = {
+        wrapInQuotes: true,
+        outputFormat: 'inline',
+        wrapInParentheses: false,
+        removeDuplicates: false,
+        sortOrder: 'none',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn(input, options)).toBe("'value1', 'value2', 'value3'");
     });
 
-    it('should add period separators', () => {
-      expect(addThousandSeparators('1234567', 'period')).toBe('1.234.567');
+    it('should format without quotes for numeric values', () => {
+      const input = '1\n2\n3';
+      const options: FormatOptions = {
+        wrapInQuotes: false,
+        outputFormat: 'inline',
+        wrapInParentheses: true,
+        removeDuplicates: false,
+        sortOrder: 'none',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn(input, options)).toBe('(1, 2, 3)');
     });
 
-    it('should handle numbers less than 1000', () => {
-      expect(addThousandSeparators('123')).toBe('123');
-      expect(addThousandSeparators('999')).toBe('999');
+    it('should remove duplicates when enabled', () => {
+      const input = 'user1\nuser2\nuser1\nuser3';
+      const options: FormatOptions = {
+        wrapInQuotes: true,
+        outputFormat: 'inline',
+        wrapInParentheses: false,
+        removeDuplicates: true,
+        sortOrder: 'none',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn(input, options)).toBe("'user1', 'user2', 'user3'");
     });
 
-    it('should handle zero', () => {
-      expect(addThousandSeparators('0')).toBe('0');
-    });
-  });
-
-  describe('removeSeparators', () => {
-    it('should remove comma separators', () => {
-      expect(removeSeparators('1,234,567')).toBe('1234567');
-    });
-
-    it('should remove space separators', () => {
-      expect(removeSeparators('1 234 567')).toBe('1234567');
-    });
-
-    it('should preserve decimal points', () => {
-      expect(removeSeparators('1,234.56')).toBe('1234.56');
+    it('should sort values alphabetically in ascending order', () => {
+      const input = 'charlie\nalice\nbob';
+      const options: FormatOptions = {
+        wrapInQuotes: true,
+        outputFormat: 'inline',
+        wrapInParentheses: false,
+        removeDuplicates: false,
+        sortOrder: 'asc',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn(input, options)).toBe("'alice', 'bob', 'charlie'");
     });
 
-    it('should handle mixed separators', () => {
-      expect(removeSeparators('1,234 567')).toBe('1234567');
-    });
-  });
-
-  describe('isValidNumber', () => {
-    it('should validate integer numbers', () => {
-      expect(isValidNumber('123')).toBe(true);
-      expect(isValidNumber('1234567')).toBe(true);
-    });
-
-    it('should validate decimal numbers', () => {
-      expect(isValidNumber('123.45')).toBe(true);
-      expect(isValidNumber('0.5')).toBe(true);
+    it('should sort values in descending order', () => {
+      const input = 'alice\ncharlie\nbob';
+      const options: FormatOptions = {
+        wrapInQuotes: true,
+        outputFormat: 'inline',
+        wrapInParentheses: false,
+        removeDuplicates: false,
+        sortOrder: 'desc',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn(input, options)).toBe("'charlie', 'bob', 'alice'");
     });
 
-    it('should validate numbers with separators', () => {
-      expect(isValidNumber('1,234,567')).toBe(true);
-      expect(isValidNumber('1 234 567')).toBe(true);
-    });
-
-    it('should reject invalid input', () => {
-      expect(isValidNumber('')).toBe(false);
-      expect(isValidNumber('abc')).toBe(false);
-      expect(isValidNumber('12.34.56')).toBe(false);
-    });
-
-    it('should handle negative numbers', () => {
-      expect(isValidNumber('-123')).toBe(true);
-      expect(isValidNumber('-1234.56')).toBe(true);
-    });
-  });
-
-  describe('processLine', () => {
-    it('should format numbers in a line with commas', () => {
-      expect(processLine('Total: 1234567', 'comma')).toBe('Total: 1,234,567');
-      expect(processLine('Value is 1234.56', 'comma')).toBe('Value is 1,234.56');
-    });
-
-    it('should format multiple numbers in a line', () => {
-      expect(processLine('1234 and 5678', 'comma')).toBe('1,234 and 5,678');
-    });
-
-    it('should handle different separators', () => {
-      expect(processLine('Total: 1234567', 'space')).toBe('Total: 1 234 567');
-    });
-
-    it('should remove separators in remove mode', () => {
-      expect(processLine('Total: 1,234,567', 'comma', true)).toBe('Total: 1234567');
-    });
-
-    it('should preserve already formatted numbers', () => {
-      const line = 'Value: 1,234.56';
-      expect(processLine(line, 'comma')).toBe('Value: 1,234.56');
-    });
-
-    it('should handle empty lines', () => {
-      expect(processLine('', 'comma')).toBe('');
-      expect(processLine('   ', 'comma')).toBe('   ');
-    });
-  });
-
-  describe('processBatch', () => {
-    it('should process multiple lines', () => {
-      const input = '1234567\n890123\n456789';
-      const expected = '1,234,567\n890,123\n456,789';
-      expect(processBatch(input, 'comma')).toBe(expected);
-    });
-
-    it('should handle mixed content', () => {
-      const input = 'Total: 1234567\nValue: 890123';
-      const expected = 'Total: 1,234,567\nValue: 890,123';
-      expect(processBatch(input, 'comma')).toBe(expected);
-    });
-
-    it('should remove separators in batch', () => {
-      const input = '1,234,567\n890,123';
-      const expected = '1234567\n890123';
-      expect(processBatch(input, 'comma', true)).toBe(expected);
+    it('should sort numeric values numerically', () => {
+      const input = '100\n20\n3';
+      const options: FormatOptions = {
+        wrapInQuotes: false,
+        outputFormat: 'inline',
+        wrapInParentheses: false,
+        removeDuplicates: false,
+        sortOrder: 'asc',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn(input, options)).toBe('3, 20, 100');
     });
 
     it('should handle empty input', () => {
-      expect(processBatch('', 'comma')).toBe('');
+      const options: FormatOptions = {
+        wrapInQuotes: true,
+        outputFormat: 'inline',
+        wrapInParentheses: true,
+        removeDuplicates: false,
+        sortOrder: 'none',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn('', options)).toBe('');
+      expect(formatForSqlIn('   ', options)).toBe('');
+    });
+
+    it('should escape single quotes in values', () => {
+      const input = "O'Connor\nD'Angelo";
+      const options: FormatOptions = {
+        wrapInQuotes: true,
+        outputFormat: 'inline',
+        wrapInParentheses: false,
+        removeDuplicates: false,
+        sortOrder: 'none',
+        trimWhitespace: true
+      };
+      expect(formatForSqlIn(input, options)).toBe("'O''Connor', 'D''Angelo'");
     });
   });
 
-  describe('countNumbers', () => {
-    it('should count numbers in text', () => {
-      expect(countNumbers('1234 and 5678')).toBe(2);
-      expect(countNumbers('Total: 1234567')).toBe(1);
+  describe('trimValues', () => {
+    it('should trim whitespace from values', () => {
+      expect(trimValues(['  user1  ', 'user2', '  user3'])).toEqual(['user1', 'user2', 'user3']);
     });
 
-    it('should count formatted numbers', () => {
-      expect(countNumbers('1,234,567 and 890,123')).toBe(2);
+    it('should filter empty values', () => {
+      expect(trimValues(['user1', '   ', 'user2', ''])).toEqual(['user1', 'user2']);
+    });
+  });
+
+  describe('removeDuplicates', () => {
+    it('should remove duplicate values', () => {
+      expect(removeDuplicates(['a', 'b', 'a', 'c', 'b'])).toEqual(['a', 'b', 'c']);
     });
 
-    it('should return 0 for no numbers', () => {
-      expect(countNumbers('No numbers here')).toBe(0);
-      expect(countNumbers('')).toBe(0);
+    it('should handle array without duplicates', () => {
+      expect(removeDuplicates(['a', 'b', 'c'])).toEqual(['a', 'b', 'c']);
+    });
+  });
+
+  describe('sortValues', () => {
+    it('should sort alphabetically in ascending order', () => {
+      expect(sortValues(['c', 'a', 'b'], 'asc')).toEqual(['a', 'b', 'c']);
     });
 
-    it('should count decimal numbers', () => {
-      expect(countNumbers('123.45 and 678.90')).toBe(2);
+    it('should sort alphabetically in descending order', () => {
+      expect(sortValues(['a', 'c', 'b'], 'desc')).toEqual(['c', 'b', 'a']);
+    });
+
+    it('should sort numbers numerically in ascending order', () => {
+      expect(sortValues(['100', '20', '3'], 'asc')).toEqual(['3', '20', '100']);
+    });
+
+    it('should sort numbers numerically in descending order', () => {
+      expect(sortValues(['3', '100', '20'], 'desc')).toEqual(['100', '20', '3']);
+    });
+
+    it('should not sort when order is none', () => {
+      expect(sortValues(['c', 'a', 'b'], 'none')).toEqual(['c', 'a', 'b']);
+    });
+  });
+
+  describe('wrapInQuotes', () => {
+    it('should wrap value in single quotes', () => {
+      expect(wrapInQuotes('test')).toBe("'test'");
+    });
+
+    it('should escape single quotes', () => {
+      expect(wrapInQuotes("O'Connor")).toBe("'O''Connor'");
+    });
+
+    it('should handle multiple single quotes', () => {
+      expect(wrapInQuotes("It's Mary's")).toBe("'It''s Mary''s'");
     });
   });
 
   describe('getFormatStats', () => {
     it('should return correct statistics', () => {
-      const input = '1234567\n890123';
-      const output = '1,234,567\n890,123';
+      const input = 'user1\nuser2\nuser3';
+      const output = "('user1', 'user2', 'user3')";
       const stats = getFormatStats(input, output);
 
-      expect(stats.inputNumbers).toBe(2);
-      expect(stats.outputNumbers).toBe(2);
-      expect(stats.lines).toBe(2);
+      expect(stats.inputCount).toBe(3);
+      expect(stats.outputCount).toBe(3);
+      expect(stats.hasDuplicates).toBe(false);
       expect(stats.outputLength).toBeGreaterThan(stats.inputLength);
+    });
+
+    it('should detect duplicates', () => {
+      const input = 'user1\nuser2\nuser1';
+      const output = "('user1', 'user2', 'user1')";
+      const stats = getFormatStats(input, output);
+
+      expect(stats.hasDuplicates).toBe(true);
+      expect(stats.inputCount).toBe(3);
     });
 
     it('should handle empty input', () => {
       const stats = getFormatStats('', '');
-      expect(stats.inputNumbers).toBe(0);
-      expect(stats.outputNumbers).toBe(0);
-      expect(stats.lines).toBe(1);
+      expect(stats.inputCount).toBe(0);
+      expect(stats.outputCount).toBe(0);
+      expect(stats.hasDuplicates).toBe(false);
+    });
+
+    it('should count comma-separated values', () => {
+      const input = 'value1, value2, value3';
+      const output = "('value1', 'value2', 'value3')";
+      const stats = getFormatStats(input, output);
+
+      expect(stats.inputCount).toBe(3);
+      expect(stats.outputCount).toBe(3);
     });
   });
 });

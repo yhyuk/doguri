@@ -1,30 +1,14 @@
 import { useState, useEffect } from 'react';
 import Header from '../../components/Layout/Header';
-import Button from '../../components/common/Button';
-import Input from '../../components/common/Input';
 import { COMMON_TIMEZONES } from './constants';
 import {
   formatUTCTime,
-  unixToDateTime,
-  getCurrentUnixTimestamp,
-  isValidUnixTimestamp,
-  formatAsISO8601,
-  parseISO8601
+  getCurrentUnixTimestamp
 } from './utils';
 
 export default function WorldTimeUTC() {
   const [utcTime, setUtcTime] = useState(formatUTCTime());
   const [currentUnixTimestamp, setCurrentUnixTimestamp] = useState(getCurrentUnixTimestamp());
-
-  // Unix timestamp converter states
-  const [timestampInput, setTimestampInput] = useState('');
-  const [timestampResult, setTimestampResult] = useState('');
-  const [timestampError, setTimestampError] = useState('');
-
-  // ISO 8601 converter states
-  const [isoInput, setIsoInput] = useState('');
-  const [isoResult, setIsoResult] = useState('');
-  const [isoError, setIsoError] = useState('');
 
   // Update UTC time and timestamp every second
   useEffect(() => {
@@ -39,69 +23,11 @@ export default function WorldTimeUTC() {
     return () => clearInterval(interval);
   }, []);
 
-  // Handle unix timestamp conversion
-  const handleTimestampConvert = () => {
-    if (!timestampInput.trim()) {
-      setTimestampError('타임스탬프를 입력하세요');
-      setTimestampResult('');
-      return;
-    }
-
-    if (!isValidUnixTimestamp(timestampInput)) {
-      setTimestampError('유효하지 않은 타임스탬프입니다');
-      setTimestampResult('');
-      return;
-    }
-
-    try {
-      const result = unixToDateTime(Number(timestampInput));
-      setTimestampResult(`${result.dateTime}\nISO: ${result.iso8601}`);
-      setTimestampError('');
-    } catch (error) {
-      setTimestampError('변환 중 오류가 발생했습니다');
-      setTimestampResult('');
-    }
-  };
-
-  // Handle ISO 8601 conversion
-  const handleISOConvert = () => {
-    if (!isoInput.trim()) {
-      setIsoError('날짜/시간을 입력하세요');
-      setIsoResult('');
-      return;
-    }
-
-    const date = parseISO8601(isoInput);
-    if (!date) {
-      setIsoError('유효하지 않은 날짜 형식입니다');
-      setIsoResult('');
-      return;
-    }
-
-    try {
-      const iso = formatAsISO8601(date);
-      const timestamp = Math.floor(date.getTime() / 1000);
-      setIsoResult(`ISO 8601: ${iso}\nUnix Timestamp: ${timestamp}`);
-      setIsoError('');
-    } catch (error) {
-      setIsoError('변환 중 오류가 발생했습니다');
-      setIsoResult('');
-    }
-  };
-
-  const handleUseCurrentTimestamp = () => {
-    setTimestampInput(currentUnixTimestamp.toString());
-  };
-
-  const handleUseCurrentISO = () => {
-    setIsoInput(new Date().toISOString());
-  };
-
   return (
     <div className="flex flex-col h-full">
       <Header
         title="세계 시간 (UTC 기준)"
-        description="UTC 시간과 타임스탬프, ISO 8601 변환 도구"
+        description="UTC 시간과 주요 시간대 정보"
       />
 
       <div className="flex-1 overflow-auto p-8">
@@ -120,79 +46,6 @@ export default function WorldTimeUTC() {
               </div>
               <div className="text-sm text-purple-600 font-mono bg-purple-100 rounded px-3 py-2 inline-block">
                 Unix Timestamp: {currentUnixTimestamp}
-              </div>
-            </div>
-          </div>
-
-          {/* Converters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Unix Timestamp Converter */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Unix Timestamp 변환
-              </h3>
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <Input
-                    label="Unix Timestamp"
-                    type="text"
-                    value={timestampInput}
-                    onChange={(e) => setTimestampInput(e.target.value)}
-                    placeholder="1710504000"
-                    error={timestampError}
-                  />
-                  <Button
-                    onClick={handleUseCurrentTimestamp}
-                    variant="secondary"
-                    size="sm"
-                    className="self-end mb-1"
-                  >
-                    현재
-                  </Button>
-                </div>
-                <Button onClick={handleTimestampConvert} className="w-full">
-                  변환
-                </Button>
-                {timestampResult && (
-                  <div className="bg-gray-50 rounded p-3 text-sm font-mono whitespace-pre-wrap">
-                    {timestampResult}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* ISO 8601 Converter */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                ISO 8601 변환
-              </h3>
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <Input
-                    label="날짜/시간"
-                    type="text"
-                    value={isoInput}
-                    onChange={(e) => setIsoInput(e.target.value)}
-                    placeholder="2024-03-15T12:00:00Z"
-                    error={isoError}
-                  />
-                  <Button
-                    onClick={handleUseCurrentISO}
-                    variant="secondary"
-                    size="sm"
-                    className="self-end mb-1"
-                  >
-                    현재
-                  </Button>
-                </div>
-                <Button onClick={handleISOConvert} className="w-full">
-                  변환
-                </Button>
-                {isoResult && (
-                  <div className="bg-gray-50 rounded p-3 text-sm font-mono whitespace-pre-wrap">
-                    {isoResult}
-                  </div>
-                )}
               </div>
             </div>
           </div>

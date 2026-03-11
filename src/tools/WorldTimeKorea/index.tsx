@@ -8,7 +8,7 @@ export default function WorldTimeKorea() {
   const [kstTime, setKstTime] = useState(formatKSTTime());
   const [citiesTimes, setCitiesTimes] = useState<Record<string, CityTimeDisplay[]>>({});
 
-  // Update time every minute
+  // Update time every second
   useEffect(() => {
     const updateTimes = () => {
       const now = new Date();
@@ -22,7 +22,7 @@ export default function WorldTimeKorea() {
     };
 
     updateTimes();
-    const interval = setInterval(updateTimes, 60000); // Update every minute
+    const interval = setInterval(updateTimes, 1000); // Update every second
 
     return () => clearInterval(interval);
   }, []);
