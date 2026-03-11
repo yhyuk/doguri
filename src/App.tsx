@@ -10,7 +10,7 @@ import WorldTimeUTC from './tools/WorldTimeUTC';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/doguri">
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/json-prettier" replace />} />
