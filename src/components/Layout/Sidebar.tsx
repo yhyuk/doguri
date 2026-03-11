@@ -1,5 +1,26 @@
 import { NavLink } from 'react-router-dom';
 import { TOOLS, CATEGORIES } from '../../utils/constants';
+// 원하는 로고 스타일을 import하세요
+// import { GradientLogo as Logo } from '../Logo'; // 그래디언트 효과
+// import { ModernLogo as Logo } from '../Logo'; // 모던 미니멀
+// import { BoxLogo as Logo } from '../Logo'; // 박스 스타일
+// import { DevLogo as Logo } from '../Logo'; // 개발자 스타일
+// import { IconLogo as Logo } from '../Logo'; // 아이콘과 함께
+// import { NeonLogo as Logo } from '../Logo'; // 네온 효과
+
+// === 영어 버전 ===
+// import { LowercaseLogo as Logo } from '../Logo'; // doguri (소문자)
+// import { CapitalizedLogo as Logo } from '../Logo'; // Doguri (첫글자 대문자)
+// import { UppercaseLogo as Logo } from '../Logo'; // DOGURI (대문자)
+import { TypewriterLogo as Logo } from '../Logo'; // doguri_ (타이핑 효과) - 현재 선택
+
+// === 한글 버전 ===
+// import { KoreanLogo as Logo } from '../Logo'; // 도구리 (한글)
+
+// === 특수 폰트 ===
+// import { TechLogo as Logo } from '../Logo'; // Orbitron 테크 스타일
+// import { MinimalLogo as Logo } from '../Logo'; // Space Grotesk 미니멀
+// import { ImpactLogo as Logo } from '../Logo'; // Bebas Neue 임팩트
 
 export default function Sidebar() {
   const toolsByCategory = CATEGORIES.map(category => ({
@@ -10,7 +31,7 @@ export default function Sidebar() {
   return (
     <aside className="w-60 bg-gray-50 border-r border-gray-200 h-screen overflow-y-auto">
       <div className="p-6 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-blue-600">도구리</h1>
+        <Logo />
       </div>
 
       <nav className="p-4">
