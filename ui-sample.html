@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도구리 (Doguri) - UI Sample</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3B82F6;
+            --background: #FFFFFF;
+            --surface: #F9FAFB;
+            --border: #E5E7EB;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --text-tertiary: #9CA3AF;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background-color: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 0 24px 24px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+        .nav-group {
+            margin-bottom: 24px;
+        }
+
+        .nav-group-title {
+            padding: 0 24px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            padding: 10px 24px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .nav-item:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .nav-item.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+            padding-left: 21px;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            height: 60px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            background-color: var(--background);
+        }
+
+        .tool-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tool-description {
+            margin-left: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Tool Content Area */
+        .content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            background-color: var(--background);
+        }
+
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Input/Output Areas */
+        .io-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .io-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .io-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .io-textarea {
+            flex: 1;
+            min-height: 400px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            resize: vertical;
+            background-color: var(--surface);
+        }
+
+        .io-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563EB;
+        }
+
+        .btn-secondary {
+            background-color: var(--background);
+            color: var(--text-secondary);
+            border-color: var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--surface);
+        }
+
+        /* Options Panel */
+        .options-panel {
+            background-color: var(--surface);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .option-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .option-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            min-width: 100px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 16px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .radio-label input[type="radio"] {
+            cursor: pointer;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background-color: var(--surface);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--success);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .io-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">도구리</div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">텍스트</div>
+                <div class="nav-item active">JSON 정리</div>
+                <div class="nav-item">대소문자 변환</div>
+                <div class="nav-item">공백 제거</div>
+                <div class="nav-item">콤마 추가</div>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">인코딩</div>
+                <div class="nav-item">Base64</div>
+                <div class="nav-item">URL 인코딩</div>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">변환</div>
+                <div class="nav-item">단위 변환</div>
+                <div class="nav-item">환율 계산</div>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">시간</div>
+                <div class="nav-item">세계 시간</div>
+                <div class="nav-item">타임스탬프</div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="tool-title">JSON 정리</h1>
+                <span class="tool-description">JSON 형식을 보기 좋게 정리하고 검증합니다</span>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <div class="tool-container">
+                    <!-- Options Panel -->
+                    <div class="options-panel">
+                        <div class="option-group">
+                            <label class="option-label">들여쓰기</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="indent" value="2" checked>
+                                    2 spaces
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="indent" value="4">
+                                    4 spaces
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="indent" value="tab">
+                                    Tab
+                                </label>
+                            </div>
+                        </div>
+                        <div class="option-group">
+                            <label class="option-label">정렬</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="sort" value="none" checked>
+                                    없음
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="sort" value="asc">
+                                    키 오름차순
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="sort" value="desc">
+                                    키 내림차순
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input/Output -->
+                    <div class="io-grid">
+                        <div class="io-section">
+                            <label class="io-label">입력</label>
+                            <textarea class="io-textarea" placeholder='{"name":"도구리","type":"utility"}를 입력하세요'></textarea>
+                            <div class="actions">
+                                <button class="btn btn-primary">정리하기</button>
+                                <button class="btn btn-secondary">지우기</button>
+                                <button class="btn btn-secondary">예제</button>
+                            </div>
+                        </div>
+
+                        <div class="io-section">
+                            <label class="io-label">결과</label>
+                            <textarea class="io-textarea" readonly placeholder="정리된 JSON이 여기에 표시됩니다"></textarea>
+                            <div class="actions">
+                                <button class="btn btn-primary">복사</button>
+                                <button class="btn btn-secondary">다운로드</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Bar -->
+                    <div class="status-bar">
+                        <div class="status-item">
+                            <span class="status-dot"></span>
+                            <span>유효한 JSON</span>
+                        </div>
+                        <div class="status-item">
+                            <span>입력: 45 bytes</span>
+                        </div>
+                        <div class="status-item">
+                            <span>출력: 52 bytes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 간단한 인터랙션 예제
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // JSON Prettier 기본 기능
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            const input = document.querySelectorAll('.io-textarea')[0].value;
+            const output = document.querySelectorAll('.io-textarea')[1];
+
+            try {
+                const parsed = JSON.parse(input);
+                const indentValue = document.querySelector('input[name="indent"]:checked').value;
+                const indent = indentValue === 'tab' ? '\t' : parseInt(indentValue);
+                output.value = JSON.stringify(parsed, null, indent);
+
+                // Status update
+                document.querySelector('.status-dot').style.backgroundColor = '#10B981';
+                document.querySelectorAll('.status-item')[0].innerHTML = '<span class="status-dot" style="background-color: #10B981"></span><span>유효한 JSON</span>';
+            } catch (e) {
+                document.querySelector('.status-dot').style.backgroundColor = '#EF4444';
+                document.querySelectorAll('.status-item')[0].innerHTML = '<span class="status-dot" style="background-color: #EF4444"></span><span>JSON 오류: ' + e.message + '</span>';
+            }
+        });
+
+        // 지우기 버튼
+        document.querySelectorAll('.btn-secondary')[0].addEventListener('click', function() {
+            document.querySelectorAll('.io-textarea')[0].value = '';
+            document.querySelectorAll('.io-textarea')[1].value = '';
+        });
+
+        // 예제 버튼
+        document.querySelectorAll('.btn-secondary')[1].addEventListener('click', function() {
+            document.querySelectorAll('.io-textarea')[0].value = '{"name":"도구리","version":"1.0.0","tools":["JSON Prettier","Base64","URL Encoder"],"author":{"name":"Doguri Team","email":"hello@doguri.kr"}}';
+        });
+
+        // 복사 버튼
+        document.querySelectorAll('.btn-primary')[1].addEventListener('click', function() {
+            const output = document.querySelectorAll('.io-textarea')[1];
+            output.select();
+            document.execCommand('copy');
+            this.textContent = '복사됨!';
+            setTimeout(() => {
+                this.textContent = '복사';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
