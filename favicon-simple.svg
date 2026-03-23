@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- 그래디언트 배경 -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="32" height="32" rx="8" fill="url(#bgGradient)"/>
+
+  <!-- 심플한 렌치 -->
+  <path d="M 22 7
+           L 17 12
+           L 20 15
+           L 15 20
+           L 12 17
+           L 7 22
+           L 10 25
+           L 25 10
+           C 26 6, 22 5, 22 7
+           Z"
+        fill="white"
+        stroke="white"
+        stroke-width="0.5"
+        stroke-linejoin="round"
+        stroke-linecap="round"/>
+</svg>
