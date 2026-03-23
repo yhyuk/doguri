@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { TOOLS, CATEGORIES } from '../../utils/constants';
+import { VERSION, COPYRIGHT_YEAR, COPYRIGHT_HOLDER } from '../../config/version';
 // 원하는 로고 스타일을 import하세요
 // import { GradientLogo as Logo } from '../Logo'; // 그래디언트 효과
 // import { ModernLogo as Logo } from '../Logo'; // 모던 미니멀
@@ -29,12 +30,12 @@ export default function Sidebar() {
   })).filter(cat => cat.tools.length > 0);
 
   return (
-    <aside className="w-60 bg-gray-50 border-r border-gray-200 h-screen overflow-y-auto">
+    <aside className="w-60 bg-gray-50 border-r border-gray-200 h-screen flex flex-col">
       <div className="p-6 border-b border-gray-200">
         <Logo />
       </div>
 
-      <nav className="p-4">
+      <nav className="flex-1 overflow-y-auto p-4">
         {toolsByCategory.map(category => (
           <div key={category.id} className="mb-6">
             <h2 className="px-3 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -61,6 +62,20 @@ export default function Sidebar() {
           </div>
         ))}
       </nav>
+
+      {/* 버전 정보 */}
+      <div className="border-t border-gray-200 px-6 py-3 bg-white/50">
+        <div className="flex items-center justify-between text-[11px]">
+          <div className="flex items-center space-x-2">
+            <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded font-mono">
+              v{VERSION}
+            </span>
+          </div>
+          <div className="text-gray-400">
+            © {COPYRIGHT_YEAR} {COPYRIGHT_HOLDER}
+          </div>
+        </div>
+      </div>
     </aside>
   );
 }

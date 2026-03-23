@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
-import Footer from './components/Footer';
 import JsonPrettier from './tools/JsonPrettier';
 import SpaceRemover from './tools/SpaceRemover';
 import CommaFormatter from './tools/CommaFormatter';
@@ -34,7 +33,6 @@ function App() {
           <Route path="url-encoder" element={<div className="p-8">URL 인코딩 (준비중)</div>} />
         </Route>
       </Routes>
-      <Footer />
     </BrowserRouter>
   );
 }
