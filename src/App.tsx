@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
+import Footer from './components/Footer';
 import JsonPrettier from './tools/JsonPrettier';
 import SpaceRemover from './tools/SpaceRemover';
 import CommaFormatter from './tools/CommaFormatter';
+import TextCase from './tools/TextCase';
 import UnitConverter from './tools/UnitConverter';
 import CurrencyExchange from './tools/CurrencyExchange';
 import WorldTimeKorea from './tools/WorldTimeKorea';
@@ -26,12 +28,13 @@ function App() {
           {/* 로고 쇼케이스 (숨겨진 페이지) */}
           <Route path="logo-showcase" element={<LogoShowcase />} />
 
-          {/* 추후 다른 도구들 추가 */}
-          <Route path="text-case" element={<div className="p-8">대소문자 변환 (준비중)</div>} />
+          {/* 대소문자 변환 */}
+          <Route path="text-case" element={<TextCase />} />
           <Route path="base64" element={<div className="p-8">Base64 (준비중)</div>} />
           <Route path="url-encoder" element={<div className="p-8">URL 인코딩 (준비중)</div>} />
         </Route>
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
