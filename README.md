@@ -1,73 +1,117 @@
-# React + TypeScript + Vite
+# Doguri (도구리)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+일상적인 개발 작업에서 자주 사용하는 간단한 도구들을 모아놓은 웹 애플리케이션입니다.
 
-Currently, two official plugins are available:
+[English](#english) | [한국어](#korean)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+<a name="korean"></a>
+## 한국어
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 개요
 
-## Expanding the ESLint configuration
+매번 검색하고 찾아서 사용하는 번거로움을 없애고자 만든 개발자 도구 모음입니다. 복잡한 기능보다는 실용성과 접근성에 중점을 두었습니다.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 주요 기능
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+#### 텍스트 처리
+- **JSON 정리**: JSON 포맷팅, 검증, 압축
+- **공백 제거**: 불필요한 공백 및 줄바꿈 제거
+- **천 단위 구분**: 숫자에 콤마 추가/제거
+- **대소문자 변환**: 다양한 케이스 변환 (camelCase, PascalCase, snake_case 등)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+#### 인코딩
+- **Base64**: 텍스트/파일 인코딩 및 디코딩
+- **URL 인코딩**: URL 안전 문자열 변환
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+#### 단위 변환
+- **단위 변환기**: 길이, 무게, 온도, 면적 등 다양한 단위 변환
+- **환율 계산**: 실시간 환율 조회 및 변환
+- **시간대 변환**: 전 세계 시간대 변환 (KST/UTC 기준)
+
+### 기술 스택
+
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+
+### 설치 및 실행
+
+```bash
+# 의존성 설치
+npm install
+
+# 개발 서버 실행
+npm run dev
+
+# 프로덕션 빌드
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 라이선스
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+MIT
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+<a name="english"></a>
+## English
+
+### Overview
+
+A collection of simple developer tools designed to eliminate the hassle of constantly searching for and using common utilities. Focused on practicality and accessibility rather than complex features.
+
+### Key Features
+
+#### Text Processing
+- **JSON Formatter**: JSON formatting, validation, and minification
+- **Space Remover**: Remove unnecessary spaces and line breaks
+- **Comma Formatter**: Add/remove thousand separators to numbers
+- **Case Converter**: Various case conversions (camelCase, PascalCase, snake_case, etc.)
+
+#### Encoding
+- **Base64**: Text/file encoding and decoding
+- **URL Encoder**: URL-safe string conversion
+
+#### Unit Conversion
+- **Unit Converter**: Convert various units (length, weight, temperature, area, etc.)
+- **Currency Exchange**: Real-time exchange rate lookup and conversion
+- **Time Zone Converter**: Global time zone conversion (KST/UTC based)
+
+### Tech Stack
+
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+
+### Installation & Usage
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
 ```
+
+### License
+
+MIT
+
+---
+
+### Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+### Contact
+
+Project Link: [https://github.com/yourusername/doguri](https://github.com/yourusername/doguri)
