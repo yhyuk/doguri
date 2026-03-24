@@ -4,6 +4,8 @@ import JsonPrettier from './tools/JsonPrettier';
 import SpaceRemover from './tools/SpaceRemover';
 import CommaFormatter from './tools/CommaFormatter';
 import TextCase from './tools/TextCase';
+import Base64 from './tools/Base64';
+import UrlEncoder from './tools/UrlEncoder';
 import UnitConverter from './tools/UnitConverter';
 import CurrencyExchange from './tools/CurrencyExchange';
 import WorldTimeKorea from './tools/WorldTimeKorea';
@@ -29,8 +31,8 @@ function App() {
 
           {/* 대소문자 변환 */}
           <Route path="text-case" element={<TextCase />} />
-          <Route path="base64" element={<div className="p-8">Base64 (준비중)</div>} />
-          <Route path="url-encoder" element={<div className="p-8">URL 인코딩 (준비중)</div>} />
+          <Route path="base64" element={<Base64 />} />
+          <Route path="url-encoder" element={<UrlEncoder />} />
         </Route>
       </Routes>
     </BrowserRouter>
