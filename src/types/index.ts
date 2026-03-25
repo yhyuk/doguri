@@ -2,7 +2,7 @@ export interface Tool {
   id: string;
   name: string;
   description: string;
-  category: 'text' | 'encoding' | 'conversion' | 'time';
+  category: 'text' | 'encoding' | 'conversion' | 'time' | 'security';
   path: string;
   icon?: string;
 }

@@ -9,18 +9,38 @@ export interface ToastMessage {
 }
 
 interface ToastProps {
-  messages: ToastMessage[];
-  onRemove: (id: string) => void;
+  messages?: ToastMessage[];
+  message?: string;
+  type?: ToastType;
+  onClose?: () => void;
+  onRemove?: (id: string) => void;
 }
 
-export default function Toast({ messages, onRemove }: ToastProps) {
-  return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 space-y-2">
-      {messages.map((toast) => (
-        <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
-      ))}
-    </div>
-  );
+export default function Toast({ messages, message, type = 'info', onClose, onRemove }: ToastProps) {
+  // 단순 메시지 모드
+  if (message && onClose) {
+    return (
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 space-y-2">
+        <ToastItem
+          toast={{ id: 'single', message, type }}
+          onRemove={() => onClose()}
+        />
+      </div>
+    );
+  }
+
+  // 다중 메시지 모드
+  if (messages && onRemove) {
+    return (
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 space-y-2">
+        {messages.map((toast) => (
+          <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
+        ))}
+      </div>
+    );
+  }
+
+  return null;
 }
 
 function ToastItem({

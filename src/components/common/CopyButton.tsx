@@ -2,20 +2,27 @@ import { useState } from 'react';
 import Button from './Button';
 
 interface CopyButtonProps {
-  text: string;
+  text?: string;
+  onClick?: () => void;
   className?: string;
 }
 
-export default function CopyButton({ text, className = '' }: CopyButtonProps) {
+export default function CopyButton({ text, onClick, className = '' }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
+    if (onClick) {
+      onClick();
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy text:', err);
+    } else if (text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy text:', err);
+      }
     }
   };
 

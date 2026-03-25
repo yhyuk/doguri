@@ -30,6 +30,27 @@ export const TOOLS: Tool[] = [
     path: '/comma-formatter'
   },
   {
+    id: 'regex-tester',
+    name: '정규식 테스터',
+    description: '정규식을 테스트하고 텍스트를 검색하거나 치환합니다',
+    category: 'text',
+    path: '/regex-tester'
+  },
+  {
+    id: 'diff-checker',
+    name: 'Diff 비교',
+    description: '두 텍스트의 차이점을 비교하고 시각화합니다',
+    category: 'text',
+    path: '/diff-checker'
+  },
+  {
+    id: 'markdown-converter',
+    name: '마크다운 ↔ HTML',
+    description: '마크다운과 HTML을 상호 변환합니다',
+    category: 'text',
+    path: '/markdown-converter'
+  },
+  {
     id: 'unit-converter',
     name: '단위 변환',
     description: '길이, 무게, 온도 등 다양한 단위를 변환합니다',
@@ -58,6 +79,20 @@ export const TOOLS: Tool[] = [
     path: '/url-encoder'
   },
   {
+    id: 'hash-generator',
+    name: '해시 생성기',
+    description: 'MD5, SHA-1, SHA-256, SHA-512 해시를 생성합니다',
+    category: 'security',
+    path: '/hash-generator'
+  },
+  {
+    id: 'uuid-generator',
+    name: 'UUID 생성기',
+    description: 'UUID v4 및 커스텀 길이 ID를 생성합니다',
+    category: 'security',
+    path: '/uuid-generator'
+  },
+  {
     id: 'world-time-korea',
     name: '세계 시간 (한국 기준)',
     description: '한국 시간을 기준으로 전 세계 주요 도시의 현재 시간을 확인합니다',
@@ -76,6 +111,7 @@ export const TOOLS: Tool[] = [
 export const CATEGORIES = [
   { id: 'text', name: '텍스트' },
   { id: 'encoding', name: '인코딩' },
+  { id: 'security', name: '보안' },
   { id: 'conversion', name: '변환' },
   { id: 'time', name: '시간' }
 ];

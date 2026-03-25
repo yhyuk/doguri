@@ -10,6 +10,11 @@ import UnitConverter from './tools/UnitConverter';
 import CurrencyExchange from './tools/CurrencyExchange';
 import WorldTimeKorea from './tools/WorldTimeKorea';
 import WorldTimeUTC from './tools/WorldTimeUTC';
+import HashGenerator from './tools/HashGenerator';
+import UuidGenerator from './tools/UuidGenerator';
+import RegexTester from './tools/RegexTester';
+import DiffChecker from './tools/DiffChecker';
+import MarkdownConverter from './tools/MarkdownConverter';
 import LogoShowcase from './components/LogoShowcase';
 
 function App() {
@@ -21,18 +26,25 @@ function App() {
           <Route path="json-prettier" element={<JsonPrettier />} />
           <Route path="space-remover" element={<SpaceRemover />} />
           <Route path="comma-formatter" element={<CommaFormatter />} />
+          <Route path="text-case" element={<TextCase />} />
+          <Route path="regex-tester" element={<RegexTester />} />
+          <Route path="diff-checker" element={<DiffChecker />} />
+          <Route path="markdown-converter" element={<MarkdownConverter />} />
+
+          <Route path="base64" element={<Base64 />} />
+          <Route path="url-encoder" element={<UrlEncoder />} />
+
+          <Route path="hash-generator" element={<HashGenerator />} />
+          <Route path="uuid-generator" element={<UuidGenerator />} />
+
           <Route path="unit-converter" element={<UnitConverter />} />
           <Route path="currency-exchange" element={<CurrencyExchange />} />
+
           <Route path="world-time-korea" element={<WorldTimeKorea />} />
           <Route path="world-time-utc" element={<WorldTimeUTC />} />
 
           {/* 로고 쇼케이스 (숨겨진 페이지) */}
           <Route path="logo-showcase" element={<LogoShowcase />} />
-
-          {/* 대소문자 변환 */}
-          <Route path="text-case" element={<TextCase />} />
-          <Route path="base64" element={<Base64 />} />
-          <Route path="url-encoder" element={<UrlEncoder />} />
         </Route>
       </Routes>
     </BrowserRouter>
