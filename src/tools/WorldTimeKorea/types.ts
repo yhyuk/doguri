@@ -10,6 +10,8 @@ export interface CityTimeDisplay extends CityTime {
   dateString: string;
   offsetFromKST: string;
   offsetHours: number;
+  isBusinessHours: boolean;
+  timePeriod: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night';
 }
 
 export type Region = 'asia' | 'europe' | 'americas' | 'oceania';
