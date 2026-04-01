@@ -105,6 +105,13 @@ export const TOOLS: Tool[] = [
     description: 'UTC 시간과 타임스탬프, ISO 8601 변환 도구',
     category: 'time',
     path: '/world-time-utc'
+  },
+  {
+    id: 'cron-generator',
+    name: 'Cron 생성기',
+    description: 'Cron 작업 스케줄을 쉽게 생성하고 검증합니다',
+    category: 'developer',
+    path: '/cron-generator'
   }
 ];
 
@@ -113,5 +120,6 @@ export const CATEGORIES = [
   { id: 'encoding', name: '인코딩' },
   { id: 'security', name: '보안' },
   { id: 'conversion', name: '변환' },
-  { id: 'time', name: '시간' }
+  { id: 'time', name: '시간' },
+  { id: 'developer', name: '개발자' }
 ];

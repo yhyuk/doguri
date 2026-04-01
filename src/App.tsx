@@ -15,6 +15,7 @@ import UuidGenerator from './tools/UuidGenerator';
 import RegexTester from './tools/RegexTester';
 import DiffChecker from './tools/DiffChecker';
 import MarkdownConverter from './tools/MarkdownConverter';
+import CronGenerator from './tools/CronGenerator';
 import LogoShowcase from './components/LogoShowcase';
 
 function App() {
@@ -42,6 +43,8 @@ function App() {
 
           <Route path="world-time-korea" element={<WorldTimeKorea />} />
           <Route path="world-time-utc" element={<WorldTimeUTC />} />
+
+          <Route path="cron-generator" element={<CronGenerator />} />
 
           {/* 로고 쇼케이스 (숨겨진 페이지) */}
           <Route path="logo-showcase" element={<LogoShowcase />} />
