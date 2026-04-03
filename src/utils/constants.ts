@@ -51,6 +51,13 @@ export const TOOLS: Tool[] = [
     path: '/markdown-converter'
   },
   {
+    id: 'text-counter',
+    name: '글자수 계산',
+    description: '글자 수, 단어 수, 문장 수, 문단 수를 실시간으로 계산합니다',
+    category: 'text',
+    path: '/text-counter'
+  },
+  {
     id: 'unit-converter',
     name: '단위 변환',
     description: '길이, 무게, 온도 등 다양한 단위를 변환합니다',
@@ -93,6 +100,20 @@ export const TOOLS: Tool[] = [
     path: '/uuid-generator'
   },
   {
+    id: 'password-generator',
+    name: '비밀번호 생성기',
+    description: '안전하고 강력한 비밀번호를 생성합니다',
+    category: 'security',
+    path: '/password-generator'
+  },
+  {
+    id: 'qr-generator',
+    name: 'QR 코드 생성기',
+    description: '텍스트나 URL을 QR 코드로 변환하고 다운로드합니다',
+    category: 'developer',
+    path: '/qr-generator'
+  },
+  {
     id: 'world-time-korea',
     name: '세계 시간 (한국 기준)',
     description: '한국 시간을 기준으로 전 세계 주요 도시의 현재 시간을 확인합니다',
@@ -112,6 +133,34 @@ export const TOOLS: Tool[] = [
     description: 'Cron 작업 스케줄을 쉽게 생성하고 검증합니다',
     category: 'developer',
     path: '/cron-generator'
+  },
+  {
+    id: 'color-picker',
+    name: '색상 피커',
+    description: 'HEX, RGB, HSL 형식 간 색상 변환 도구',
+    category: 'developer',
+    path: '/color-picker'
+  },
+  {
+    id: 'date-calculator',
+    name: '날짜 계산기',
+    description: 'D-day 계산, 날짜 차이 계산, 날짜 더하기/빼기 기능을 제공합니다',
+    category: 'calculator',
+    path: '/date-calculator'
+  },
+  {
+    id: 'age-calculator',
+    name: '나이 계산기',
+    description: '만 나이, 연 나이, 개월 수, 총 일수, 다음 생일까지 남은 일수를 계산합니다',
+    category: 'calculator',
+    path: '/age-calculator'
+  },
+  {
+    id: 'random-picker',
+    name: '랜덤 추첨기',
+    description: '목록이나 숫자 범위에서 랜덤으로 선택합니다',
+    category: 'daily',
+    path: '/random-picker'
   }
 ];
 
@@ -121,5 +170,7 @@ export const CATEGORIES = [
   { id: 'security', name: '보안' },
   { id: 'conversion', name: '변환' },
   { id: 'time', name: '시간' },
+  { id: 'calculator', name: '계산기' },
+  { id: 'daily', name: '일상' },
   { id: 'developer', name: '개발자' }
 ];

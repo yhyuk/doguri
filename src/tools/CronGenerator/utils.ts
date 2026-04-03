@@ -140,16 +140,16 @@ export function cronToHumanReadable(expression: string): string {
   const parts: string[] = [];
 
   // 분
-  const minuteDesc = describeField(config.minute, '분', 0, 59);
+  const minuteDesc = describeField(config.minute, '분');
 
   // 시간
-  const hourDesc = describeField(config.hour, '시', 0, 23);
+  const hourDesc = describeField(config.hour, '시');
 
   // 일
-  const dayDesc = describeField(config.dayOfMonth, '일', 1, 31);
+  const dayDesc = describeField(config.dayOfMonth, '일');
 
   // 월
-  const monthDesc = describeField(config.month, '월', 1, 12);
+  const monthDesc = describeField(config.month, '월');
 
   // 요일
   const weekDesc = describeWeekday(config.dayOfWeek);
@@ -185,7 +185,7 @@ export function cronToHumanReadable(expression: string): string {
 /**
  * 필드를 설명으로 변환
  */
-function describeField(field: string, unit: string, min: number, max: number): string {
+function describeField(field: string, unit: string): string {
   if (field === '*' || field === '?') {
     return `매 ${unit}`;
   }
@@ -228,7 +228,7 @@ function describeWeekday(field: string): string {
   }
 
   if (field.includes('/')) {
-    const [range, step] = field.split('/');
+    const [, step] = field.split('/');
     return `${step}일마다`;
   }
 
@@ -315,7 +315,7 @@ export const cronPresets: CronPreset[] = [
 /**
  * 다음 실행 시간 계산 (간단한 버전)
  */
-export function getNextRunTimes(expression: string, count: number = 5): string[] {
+export function getNextRunTimes(expression: string): string[] {
   // 실제로는 복잡한 로직이 필요하지만, 여기서는 간단히 설명만 반환
   const validation = validateCronExpression(expression);
   if (!validation.valid) {

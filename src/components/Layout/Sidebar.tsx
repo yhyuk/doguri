@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { TOOLS, CATEGORIES } from '../../utils/constants';
 import { VERSION, COPYRIGHT_YEAR, COPYRIGHT_HOLDER } from '../../config/version';
 // 원하는 로고 스타일을 import하세요
@@ -66,11 +66,18 @@ export default function Sidebar() {
       {/* 버전 정보 */}
       <div className="border-t border-gray-200 px-6 py-3 bg-white/50">
         <div className="flex items-center justify-between text-[11px]">
-          <div className="flex items-center space-x-2">
-            <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded font-mono">
+          <Link
+            to="/changelog"
+            className="flex items-center space-x-2 hover:opacity-70 transition-opacity group"
+            title="변경 이력 보기"
+          >
+            <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-700 transition-colors">
               v{VERSION}
             </span>
-          </div>
+            <span className="text-[10px] text-gray-400 group-hover:text-blue-500">
+              변경 이력
+            </span>
+          </Link>
           <div className="text-gray-400">
             © {COPYRIGHT_YEAR} {COPYRIGHT_HOLDER}
           </div>
