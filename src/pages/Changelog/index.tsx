@@ -69,9 +69,9 @@ export default function Changelog() {
               {/* 변경사항 */}
               <ul className="space-y-2">
                 {version.changes.map((change, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="text-blue-500 mt-1.5">•</span>
-                    <span className="text-sm text-gray-700 flex-1">{change}</span>
+                  <li key={index} className="flex gap-3">
+                    <span className="text-blue-500 text-sm leading-relaxed">•</span>
+                    <span className="text-sm text-gray-700 flex-1 leading-relaxed">{change}</span>
                   </li>
                 ))}
               </ul>
