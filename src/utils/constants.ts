@@ -161,16 +161,51 @@ export const TOOLS: Tool[] = [
     description: '목록이나 숫자 범위에서 랜덤으로 선택합니다',
     category: 'daily',
     path: '/random-picker'
+  },
+  {
+    id: 'jwt-decoder',
+    name: 'JWT 디코더',
+    description: 'JWT 토큰을 디코딩하여 Header, Payload, 만료 정보를 확인합니다',
+    category: 'encoding',
+    path: '/jwt-decoder'
+  },
+  {
+    id: 'base-converter',
+    name: '진법 변환기',
+    description: '2진수, 8진수, 10진수, 16진수 간 변환을 수행합니다',
+    category: 'conversion',
+    path: '/base-converter'
+  },
+  {
+    id: 'image-converter',
+    name: '이미지 형식 변환',
+    description: 'PNG, JPG, WebP 간 이미지 형식을 변환합니다',
+    category: 'conversion',
+    path: '/image-converter'
+  },
+  {
+    id: 'env-editor',
+    name: '.env 편집기',
+    description: '환경 변수 파일을 정리하고 중복 검사, 마스킹, 정렬 기능을 제공합니다',
+    category: 'developer',
+    path: '/env-editor'
+  },
+  {
+    id: 'http-status-code',
+    name: 'HTTP 상태 코드',
+    description: 'HTTP 상태 코드의 의미와 사용 사례를 검색합니다',
+    category: 'developer',
+    path: '/http-status-code'
   }
 ];
 
 export const CATEGORIES = [
-  { id: 'text', name: '텍스트' },
-  { id: 'encoding', name: '인코딩' },
-  { id: 'security', name: '보안' },
-  { id: 'conversion', name: '변환' },
-  { id: 'time', name: '시간' },
-  { id: 'calculator', name: '계산기' },
-  { id: 'daily', name: '일상' },
-  { id: 'developer', name: '개발자' }
+  { id: 'text', name: '텍스트', icon: '📝', color: 'blue' },
+  { id: 'encoding', name: '인코딩', icon: '🔐', color: 'purple' },
+  { id: 'security', name: '보안', icon: '🛡️', color: 'red' },
+  { id: 'conversion', name: '변환', icon: '🔄', color: 'green' },
+  { id: 'time', name: '시간', icon: '⏰', color: 'amber' },
+  { id: 'calculator', name: '계산기', icon: '🧮', color: 'teal' },
+  { id: 'daily', name: '일상', icon: '🎲', color: 'pink' },
+  { id: 'developer', name: '개발자', icon: '💻', color: 'indigo' }
 ];

@@ -31,9 +31,9 @@ export default function Sidebar() {
 
   return (
     <aside className="w-60 bg-gray-50 border-r border-gray-200 h-screen flex flex-col">
-      <div className="p-6 border-b border-gray-200">
+      <Link to="/" className="block p-6 border-b border-gray-200 hover:bg-gray-100 transition-colors">
         <Logo />
-      </div>
+      </Link>
 
       <nav className="flex-1 overflow-y-auto p-4">
         {toolsByCategory.map(category => (

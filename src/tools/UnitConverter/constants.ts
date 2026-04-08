@@ -6,7 +6,8 @@ export const CATEGORIES: CategoryOption[] = [
   { value: 'temperature', label: '온도 (Temperature)' },
   { value: 'volume', label: '부피 (Volume)' },
   { value: 'area', label: '면적 (Area)' },
-  { value: 'speed', label: '속도 (Speed)' }
+  { value: 'speed', label: '속도 (Speed)' },
+  { value: 'data', label: '파일 크기 (Data)' }
 ];
 
 export const UNITS: Record<UnitCategory, UnitOption[]> = {
@@ -49,6 +50,18 @@ export const UNITS: Record<UnitCategory, UnitOption[]> = {
     { value: 'm/s', label: '미터/초 (m/s)' },
     { value: 'km/h', label: '킬로미터/시 (km/h)' },
     { value: 'mph', label: '마일/시 (mph)' }
+  ],
+  data: [
+    { value: 'B', label: '바이트 (B)' },
+    { value: 'KB', label: '킬로바이트 (KB)' },
+    { value: 'MB', label: '메가바이트 (MB)' },
+    { value: 'GB', label: '기가바이트 (GB)' },
+    { value: 'TB', label: '테라바이트 (TB)' },
+    { value: 'PB', label: '페타바이트 (PB)' },
+    { value: 'KiB', label: '키비바이트 (KiB)' },
+    { value: 'MiB', label: '메비바이트 (MiB)' },
+    { value: 'GiB', label: '기비바이트 (GiB)' },
+    { value: 'TiB', label: '테비바이트 (TiB)' }
   ]
 };
 
@@ -87,5 +100,18 @@ export const CONVERSION_FACTORS: Record<string, number> = {
   // Speed (base: m/s)
   'm/s': 1,
   'km/h': 0.277778,
-  'mph': 0.44704
+  'mph': 0.44704,
+
+  // Data (base: byte) - SI 단위 (1000 기반)
+  'B': 1,
+  'KB': 1000,
+  'MB': 1000000,
+  'GB': 1000000000,
+  'TB': 1000000000000,
+  'PB': 1000000000000000,
+  // IEC 단위 (1024 기반)
+  'KiB': 1024,
+  'MiB': 1048576,
+  'GiB': 1073741824,
+  'TiB': 1099511627776
 };

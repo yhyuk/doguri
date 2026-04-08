@@ -86,7 +86,8 @@ export default function UnitConverter() {
       temperature: '25',
       volume: '1',
       area: '10',
-      speed: '60'
+      speed: '60',
+      data: '1024'
     };
     setInputValue(examples[category]);
   };
@@ -226,6 +227,14 @@ export default function UnitConverter() {
                   <div>1 km/h = 0.621 mph</div>
                   <div>1 mph = 1.609 km/h</div>
                   <div>100 km/h = 27.78 m/s</div>
+                </>
+              )}
+              {category === 'data' && (
+                <>
+                  <div>1 KB = 1,000 B (SI)</div>
+                  <div>1 KiB = 1,024 B (IEC)</div>
+                  <div>1 MB = 1,000 KB</div>
+                  <div>1 GiB = 1,024 MiB</div>
                 </>
               )}
             </div>

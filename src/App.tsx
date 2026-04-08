@@ -23,6 +23,12 @@ import DateCalculator from './tools/DateCalculator';
 import AgeCalculator from './tools/AgeCalculator';
 import RandomPicker from './tools/RandomPicker';
 import QRGenerator from './tools/QRGenerator';
+import JwtDecoder from './tools/JwtDecoder';
+import BaseConverter from './tools/BaseConverter';
+import ImageConverter from './tools/ImageConverter';
+import EnvEditor from './tools/EnvEditor';
+import HttpStatusCode from './tools/HttpStatusCode';
+import Home from './pages/Home';
 import LogoShowcase from './components/LogoShowcase';
 import Changelog from './pages/Changelog';
 
@@ -31,7 +37,7 @@ function App() {
     <BrowserRouter basename="/doguri">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Navigate to="/json-prettier" replace />} />
+          <Route index element={<Home />} />
           <Route path="json-prettier" element={<JsonPrettier />} />
           <Route path="space-remover" element={<SpaceRemover />} />
           <Route path="comma-formatter" element={<CommaFormatter />} />
@@ -61,6 +67,12 @@ function App() {
           <Route path="cron-generator" element={<CronGenerator />} />
           <Route path="color-picker" element={<ColorPicker />} />
           <Route path="qr-generator" element={<QRGenerator />} />
+
+          <Route path="jwt-decoder" element={<JwtDecoder />} />
+          <Route path="base-converter" element={<BaseConverter />} />
+          <Route path="image-converter" element={<ImageConverter />} />
+          <Route path="env-editor" element={<EnvEditor />} />
+          <Route path="http-status-code" element={<HttpStatusCode />} />
 
           {/* 변경 이력 페이지 */}
           <Route path="changelog" element={<Changelog />} />

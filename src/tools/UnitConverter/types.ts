@@ -4,7 +4,8 @@ export type UnitCategory =
   | 'temperature'
   | 'volume'
   | 'area'
-  | 'speed';
+  | 'speed'
+  | 'data';
 
 export type LengthUnit = 'm' | 'cm' | 'mm' | 'km' | 'ft' | 'in' | 'yd' | 'mi';
 export type WeightUnit = 'kg' | 'g' | 'mg' | 'lb' | 'oz' | 'ton';
@@ -13,7 +14,9 @@ export type VolumeUnit = 'L' | 'mL' | 'gal' | 'fl oz';
 export type AreaUnit = 'm²' | 'ft²' | 'acre' | 'hectare';
 export type SpeedUnit = 'm/s' | 'km/h' | 'mph';
 
-export type Unit = LengthUnit | WeightUnit | TemperatureUnit | VolumeUnit | AreaUnit | SpeedUnit;
+export type DataUnit = 'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB' | 'KiB' | 'MiB' | 'GiB' | 'TiB';
+
+export type Unit = LengthUnit | WeightUnit | TemperatureUnit | VolumeUnit | AreaUnit | SpeedUnit | DataUnit;
 
 export interface UnitOption {
   value: string;
