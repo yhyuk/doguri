@@ -38,10 +38,6 @@ export default function Home() {
     return result;
   }, [search, activeCategory]);
 
-  const getCategoryInfo = (categoryId: string) => {
-    return CATEGORIES.find((c) => c.id === categoryId);
-  };
-
   return (
     <div className="h-full flex flex-col bg-gray-50">
       {/* 헤더 */}
