@@ -3,6 +3,7 @@ import Header from '../../components/Layout/Header';
 import Button from '../../components/common/Button';
 import TextArea from '../../components/common/TextArea';
 import { formatJson, minifyJson, sortJsonKeys, validateJson } from './utils';
+import JsonTreeView from './JsonTreeView';
 
 export default function JsonPrettier() {
   const [input, setInput] = useState('');
@@ -11,6 +12,9 @@ export default function JsonPrettier() {
   const [sortKeys, setSortKeys] = useState<'none' | 'asc' | 'desc'>('none');
   const [autoFormat, setAutoFormat] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<'format' | 'minify'>('format');
+  // 트리 전체 펼침/접힘 제어 (null이면 depth<2 기본 펼침)
+  const [treeForceOpen, setTreeForceOpen] = useState<boolean | null>(null);
+  const [treeRemountKey, setTreeRemountKey] = useState(0);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [status, setStatus] = useState<{
@@ -191,6 +195,22 @@ export default function JsonPrettier() {
     setTimeout(() => setShowToast(false), 2000);
   };
 
+  const applyTreeOpen = (value: boolean) => {
+    setTreeForceOpen(value);
+    setTreeRemountKey((k) => k + 1);
+  };
+
+  // 트리 뷰용 파싱 (output 우선, 없으면 input)
+  const parsedData = (() => {
+    const source = output || input;
+    if (!source) return null;
+    try {
+      return JSON.parse(source);
+    } catch {
+      return null;
+    }
+  })();
+
   const inputSize = new Blob([input]).size;
   const outputSize = new Blob([output]).size;
   const compressionRatio = inputSize > 0 && outputSize > 0
@@ -270,13 +290,18 @@ export default function JsonPrettier() {
 
           {/* 입력/출력 그리드 - 이전 스타일 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[500px]">
-            <div className="flex flex-col">
-              <TextArea
-                label="입력"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder='{"name":"도구리","type":"utility"}를 입력하세요'
-              />
+            <div className="flex flex-col min-h-0">
+              <div className="flex items-center mb-2 h-[26px]">
+                <span className="text-sm font-medium text-gray-700">입력</span>
+              </div>
+              <div className="flex-1 min-h-0">
+                <TextArea
+                  className="h-full"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder='{"name":"도구리","type":"utility"}를 입력하세요'
+                />
+              </div>
               <div className="flex gap-3 mt-4">
                 <Button onClick={handleFormat}>정리하기</Button>
                 <Button onClick={handleMinify}>압축하기</Button>
@@ -285,13 +310,46 @@ export default function JsonPrettier() {
               </div>
             </div>
 
-            <div className="flex flex-col">
-              <TextArea
-                label="결과"
-                value={output}
-                readOnly
-                placeholder="정리된 JSON이 여기에 표시됩니다"
-              />
+            <div className="flex flex-col min-h-0">
+              {/* 결과 라벨 + 전체 펼치기/접기 (between 배치) */}
+              <div className="flex items-center justify-between mb-2 h-[26px]">
+                <span className="text-sm font-medium text-gray-700">결과</span>
+                {parsedData !== null && (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => applyTreeOpen(true)}
+                      className="px-2 py-1 text-xs rounded bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    >
+                      전체 펼치기
+                    </button>
+                    <button
+                      onClick={() => applyTreeOpen(false)}
+                      className="px-2 py-1 text-xs rounded bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    >
+                      전체 접기
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* 결과 본문 — 트리 뷰 (유효한 JSON일 때), 아니면 텍스트 폴백 */}
+              <div className="flex-1 min-h-0">
+                {parsedData !== null ? (
+                  <JsonTreeView
+                    data={parsedData}
+                    forceOpen={treeForceOpen}
+                    remountKey={treeRemountKey}
+                  />
+                ) : (
+                  <textarea
+                    className="w-full h-full p-4 border border-gray-300 rounded-lg font-mono text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    value={output}
+                    readOnly
+                    placeholder="정리된 JSON이 여기에 표시됩니다"
+                  />
+                )}
+              </div>
+
               <div className="flex gap-3 mt-4">
                 <Button onClick={handleCopy}>복사</Button>
                 <Button variant="secondary" onClick={handleDownload}>다운로드</Button>
