@@ -8,6 +8,25 @@ interface VersionData {
 
 const versions: VersionData[] = [
   {
+    version: '1.2.0',
+    date: '2026-06-11',
+    changes: [
+      'JSON 정리 결과를 접기/펼치기 가능한 트리 뷰로 표시',
+      'JSON 오류 위치(행/열)와 원인을 한국어 설명, 해결 힌트와 함께 표시',
+      'JSON 오류 문자 하이라이트 발췌 및 입력에서 오류 위치 선택 기능 추가'
+    ]
+  },
+  {
+    version: '1.1.0',
+    date: '2026-04-08',
+    changes: [
+      '신규 도구 5종 추가: JWT 디코더, 진법 변환기, 이미지 형식 변환, .env 편집기, HTTP 상태 코드 사전',
+      '카테고리별 카드 그리드 홈 화면 구현 (검색, 카테고리 필터)',
+      '단위 변환기에 파일 크기(Data) 카테고리 추가',
+      '카테고리별 아이콘/색상 체계 적용'
+    ]
+  },
+  {
     version: '1.0.2',
     date: '2026-04-03',
     changes: [
@@ -57,7 +76,7 @@ export default function Changelog() {
                   <span className="text-2xl font-bold text-gray-900">
                     v{version.version}
                   </span>
-                  {version.version === '1.0.2' && (
+                  {version.version === versions[0].version && (
                     <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">
                       최신
                     </span>
