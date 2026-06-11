@@ -1,7 +1,8 @@
-import type { TextareaHTMLAttributes } from 'react';
+import type { TextareaHTMLAttributes, Ref } from 'react';
 
 interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
+  ref?: Ref<HTMLTextAreaElement>;
 }
 
 export default function TextArea({ label, className = '', ...props }: TextAreaProps) {

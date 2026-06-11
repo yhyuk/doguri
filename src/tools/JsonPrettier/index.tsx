@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Header from '../../components/Layout/Header';
 import Button from '../../components/common/Button';
 import TextArea from '../../components/common/TextArea';
-import { formatJson, minifyJson, sortJsonKeys, validateJson } from './utils';
+import { formatJson, minifyJson, sortJsonKeys, analyzeJsonError } from './utils';
+import type { JsonErrorInfo } from './utils';
 import JsonTreeView from './JsonTreeView';
 
 export default function JsonPrettier() {
@@ -17,6 +18,8 @@ export default function JsonPrettier() {
   const [treeRemountKey, setTreeRemountKey] = useState(0);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [errorInfo, setErrorInfo] = useState<JsonErrorInfo | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const [status, setStatus] = useState<{
     valid: boolean;
     message: string;
@@ -29,12 +32,14 @@ export default function JsonPrettier() {
   useEffect(() => {
     if (!input) {
       setStatus({ valid: true, message: 'JSON을 입력하세요' });
+      setErrorInfo(null);
       setOutput('');
       return;
     }
 
-    const validation = validateJson(input);
-    if (validation.valid) {
+    const info = analyzeJsonError(input);
+    setErrorInfo(info);
+    if (!info) {
       setStatus({ valid: true, message: '✓ 유효한 JSON' });
       if (autoFormat) {
         handleFormatAuto();
@@ -42,7 +47,10 @@ export default function JsonPrettier() {
     } else {
       setStatus({
         valid: false,
-        message: validation.error || 'JSON 오류'
+        message:
+          info.line !== undefined
+            ? `${info.line}행 ${info.column}열 · ${info.message}`
+            : info.message
       });
       if (autoFormat) {
         setOutput('');
@@ -90,11 +98,9 @@ export default function JsonPrettier() {
       }
 
       setOutput(formatted);
-    } catch (error) {
+    } catch {
+      // 상세 오류는 입력 검증 useEffect에서 errorInfo로 표시됨
       setOutput('');
-      if (error instanceof Error) {
-        setStatus({ valid: false, message: error.message });
-      }
     }
   };
 
@@ -105,18 +111,28 @@ export default function JsonPrettier() {
     try {
       const minified = minifyJson(input);
       setOutput(minified);
-    } catch (error) {
+    } catch {
       setOutput('');
-      if (error instanceof Error) {
-        setStatus({ valid: false, message: error.message });
-      }
     }
   };
 
   const handleClear = () => {
     setInput('');
     setOutput('');
+    setErrorInfo(null);
     setStatus({ valid: true, message: 'JSON을 입력하세요' });
+  };
+
+  const handleGoToError = () => {
+    const el = inputRef.current;
+    if (!el || !errorInfo || errorInfo.position === undefined) return;
+    el.focus();
+    el.setSelectionRange(errorInfo.position, Math.min(errorInfo.position + 1, input.length));
+    if (errorInfo.line !== undefined) {
+      // 대략적인 줄 높이 기준으로 오류 줄이 보이도록 스크롤
+      const lineHeight = 20;
+      el.scrollTop = Math.max(0, (errorInfo.line - 3) * lineHeight);
+    }
   };
 
   const handleCopy = async () => {
@@ -296,6 +312,7 @@ export default function JsonPrettier() {
               </div>
               <div className="flex-1 min-h-0">
                 <TextArea
+                  ref={inputRef}
                   className="h-full"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -340,6 +357,38 @@ export default function JsonPrettier() {
                     forceOpen={treeForceOpen}
                     remountKey={treeRemountKey}
                   />
+                ) : errorInfo && input ? (
+                  <div className="w-full h-full p-4 border border-red-200 rounded-lg bg-red-50 overflow-auto">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm font-semibold text-red-700">JSON 구문 오류</span>
+                      {errorInfo.line !== undefined && (
+                        <span className="px-2 py-0.5 text-xs rounded bg-red-100 text-red-700 font-mono">
+                          {errorInfo.line}행 {errorInfo.column}열
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-red-800 mb-3">{errorInfo.message}</p>
+                    {errorInfo.excerpt && (
+                      <pre className="p-3 bg-white border border-red-200 rounded-md text-xs font-mono whitespace-pre-wrap break-all mb-3 leading-relaxed">
+                        <span className="text-gray-500">{errorInfo.excerpt.before}</span>
+                        <span className="bg-red-200 text-red-900 font-bold rounded px-0.5">
+                          {errorInfo.excerpt.errorChar || ' '}
+                        </span>
+                        <span className="text-gray-500">{errorInfo.excerpt.after}</span>
+                      </pre>
+                    )}
+                    {errorInfo.hint && (
+                      <p className="text-xs text-gray-600 mb-3">{errorInfo.hint}</p>
+                    )}
+                    {errorInfo.position !== undefined && (
+                      <button
+                        onClick={handleGoToError}
+                        className="px-3 py-1.5 text-xs rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors"
+                      >
+                        입력에서 오류 위치 선택
+                      </button>
+                    )}
+                  </div>
                 ) : (
                   <textarea
                     className="w-full h-full p-4 border border-gray-300 rounded-lg font-mono text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
@@ -431,7 +480,7 @@ export default function JsonPrettier() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-400 mt-0.5">•</span>
-                <span>잘못된 JSON은 빨간색으로 표시됩니다</span>
+                <span>잘못된 JSON은 오류 위치(행/열)와 원인이 결과 영역에 표시됩니다</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-400 mt-0.5">•</span>
