@@ -1,0 +1,26 @@
+# gitleaks 설정 - AI 코드 작성 시 시크릿 유출 차단 (중앙 원본)
+# secgate 함수가 이 파일을 각 레포 루트로 복사한다.
+# gitleaks 기본 룰셋을 상속하고, 흔한 오탐만 allowlist로 제외한다.
+
+title = "secret scan"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "오탐 제외 목록 (테스트 픽스처, 예시 값, 빌드 산출물)"
+
+paths = [
+  '''build/''',
+  '''.*/build/.*''',
+  '''gradle/wrapper/.*''',
+  '''.*\.md$''',
+  '''.*Test\.java$''',
+  '''.*\.http$''',
+]
+
+regexes = [
+  '''(?i)(example|sample|dummy|placeholder|your[-_]?(api|secret|token))''',
+  '''(?i)xxxx+''',
+  '''(?i)changeme''',
+]

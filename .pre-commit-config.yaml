@@ -1,0 +1,32 @@
+# AI 코드 작성 시 보안 게이트 - pre-push 단계 강제 실행 (중앙 원본)
+# secgate 함수가 이 파일을 각 레포 루트로 복사한다.
+#
+# 적용:  secgate   (레포 안에서 한 줄)
+# 수동 검사:  pre-commit run --all-files --hook-stage pre-push
+
+default_stages: [pre-push]
+fail_fast: false
+
+repos:
+  # 1) 시크릿 유출 탐지 - 하드코딩된 API 키/토큰/비밀번호
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+        name: "시크릿 스캔 (gitleaks)"
+        stages: [pre-push]
+
+  # 2) 코드 취약 패턴 탐지 - Java/Spring 룰셋 + 시크릿 룰셋
+  - repo: https://github.com/semgrep/semgrep
+    rev: v1.167.0
+    hooks:
+      - id: semgrep
+        name: "취약 패턴 스캔 (semgrep)"
+        args:
+          - "--config=p/java"
+          - "--config=p/secrets"
+          - "--error"
+          - "--quiet"
+          - "--skip-unknown-extensions"
+        exclude: '^(build/|.*/build/|gradle/)'
+        stages: [pre-push]
