@@ -148,6 +148,21 @@ export default function JsonPrettier() {
     }
   };
 
+  const handleCopyOneLine = async () => {
+    const source = output || input;
+    if (!source) return;
+
+    try {
+      const oneLine = minifyJson(source);
+      await navigator.clipboard.writeText(oneLine);
+      setToastMessage('한 줄 JSON이 복사되었습니다!');
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
+
   const handleExample = () => {
     const examples = [
       {
@@ -401,6 +416,7 @@ export default function JsonPrettier() {
 
               <div className="flex gap-3 mt-4">
                 <Button onClick={handleCopy}>복사</Button>
+                <Button variant="secondary" onClick={handleCopyOneLine}>한 줄 복사</Button>
                 <Button variant="secondary" onClick={handleDownload}>다운로드</Button>
               </div>
             </div>
